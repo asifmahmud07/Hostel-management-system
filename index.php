@@ -1,4 +1,7 @@
-
+<?php
+	session_start();
+	include("includes/connection.inc.php");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,13 +21,35 @@
 						<li><a href="index.php">Home</a></li>
 						<li><a href="#">About</a></li>
 						<li><a href="#">Contact Us</a></li>
-						
+						<?php
+						if(isset($_SESSION['userId'])){
+							header("Location: ../uhome.php");
+						}
+						else{
+							echo '<form action="includes/login.inc.php" method="post">
+							<input type="text" name="sid" placeholder="Student ID..." required>
+							<input type="password" name="pwd" placeholder="Password..." required>
+							<button type="submit" name="login-submit" style="width:50px;border-radius:20px; height:25px;opacity:0.8">Login</button>
+							<a href="signup.php">Sign Up</a>
+							</form>';
+						}
+					?>
 					</ul>
 				</div>
 			</div>
 			<div id="banner"><br><br><br><br><br><br><br>
 				<center><div style="background-color:rgba(255,255,255,0.9);width:50%;"><br>
-					
+					<?php
+						$q="select * from room where status='vacant'";
+						$run=mysqli_query($a,$q);
+						$num=mysqli_num_rows($run);
+						if($num>0){
+							echo '<center><h2><font color="blue">',$num,' rooms available in the hostel</font></h2></center>';
+						}
+						else{
+							echo "Room not available";
+						}
+					?>
 					<center><h2><font color="blue">Sign Up/Login to book rooms</font></h2></center><br>
 				</div></center>
 			</div>
